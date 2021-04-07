@@ -144,20 +144,181 @@ spec:
 					cd /app/sap_cli/bin/
 					export JAVA_HOME=/app/sapmachine-jdk-11.0.10/
 					./sapccm --help
-					'''
 					
-					/*
-					  	sapccm config set auth-credentials {TOKEN_VALUE}
-					  	echo "Create a Build"
-					  	sapccm build create –application-code=commerce-cloud  --branch=BRANCH_NAME –name=BUILD_NAME –no-wait –subscription-code= SUBSCRIPTION_CODE
-					  
-					  	echo "Check a Build"
-					  	sapccm  build show –subscription-code=SUBSCRIPTION_CODE  --build-code=BUILD_CODE
-					  	echo "Create a Deployment"
-					  	sapccm deployment create –build-code=BUILD_CODE  --subscription-code=SUBSCRIPTION_CODE  --database-update-mode=NONE/UPDATE/INITIALIZE  --environment-code=d1/s1/p1  --strategy=CREATE/ROLLING_UPDATE  --subscriptioni-code=SUBSCRIPTION_CODE
-					  	echo "Check Deployment" 
-					  	sapccm deployment list –subscription-code=SUBSCRIPTION_CODE 
-					*/
+            				echo "Authenticating"
+            				./sapccm config set auth-credentials 621ae91d71a817f858ad378177a333e
+					
+            				echo "Creating Build"
+            				./sapccm build create  --application-code="commerce-cloud" --branch=$ccv2_branch --name="JENKINS_$JOB_NAME-BLD_$BUILD_NUMBER"  --no-wait  --subscription-code=${ccv2_sub}
+            				retVal=$?
+            				if [ $retVal -ne 0 ]; then
+              					echo "CCv2 Build Error..."
+              					exit $retVal
+            				fi
+            				sleep 90
+            				ccv2_build_code=`./sapccm build list --subscription-code=${ccv2_sub} |grep "JENKINS_$JOB_NAME-BLD_$BUILD_NUMBER"|cut -d' ' -f1`
+            				if [ "$ccv2_build_code" == "" ]; then
+              					ccv2_build_code=`./sapccm build list --subscription-code=${ccv2_sub} |grep "JENKINS_$JOB_NAME-BLD_$BUILD_NUMBER"|cut -d' ' -f1`
+            				fi
+            				if [ "$ccv2_build_code" == "" ]; then
+              					echo; echo "Error getting build code..."; echo
+              					exit 1
+            				fi
+            				echo "##########################"
+            				echo "Build Code: ${ccv2_build_code}"
+            				echo "##########################"
+            				echo
+            				./sapccm build show --subscription-code=${ccv2_sub} --build-code=${ccv2_build_code}
+            				END_SIGN="No"
+            				END=135
+            				for i in $(seq 1 $END)
+            				do 
+            				echo $i
+            				BUILD_STATUS=`./sapccm build show --subscription-code=${ccv2_sub} --build-code=${ccv2_build_code} |grep -v "CREATED BY"`
+            				echo ${BUILD_STATUS}
+            				BUILD_SUCCESS=0
+            				BUILD_SUCCESS=`echo ${BUILD_STATUS}|grep "SUCCESS" |wc -l`
+            				if [[ ${BUILD_SUCCESS} > 0 ]]; then
+              					date ; echo 
+              					echo "CCv2 Build completed successfully..."; echo
+              					END_SIGN="No"
+              					break
+            				fi
+            				BUILD_FAIL=0
+            				BUILD_FAIL=`echo ${BUILD_STATUS}|grep "FAIL" |wc -l`
+            				if [[ ${BUILD_FAIL} > 0 ]]; then
+              					./sapccm build logs --build-code=${ccv2_build_code} --file-path=$WORKSPACE/${ccv2_build_code}.zip --subscription-code=${ccv2_sub}
+              					cd $WORKSPACE
+              					unzip ${ccv2_build_code}.zip
+              					tail -800 releaselog-${ccv2_build_code}.txt
+              					date ; echo
+              					echo "CCv2 Build failed..."; echo
+              					rm -rf ${ccv2_build_code}.zip releaselog-${ccv2_build_code}.txt
+              					exit 1
+            				fi
+            				date
+            				sleep 30
+            				echo
+            				done
+            				echo; echo "=====================================================CCv2 Build List======================================================================"
+            				./sapccm build list --subscription-code=${ccv2_sub}
+            				echo "=========================================================================================================================================="; echo
+            				echo "##########################"
+            				for i in {1..8}
+            				do
+            				echo "Build Code: ${ccv2_build_code}"
+            				done
+            				echo "##########################"
+            				echo
+
+
+      
+          				echo " Deploying now"
+          				if [ "$ccv2_build_code" == "" ]; then
+            					echo ; echo "##############################"
+            					echo "Please enter a CCv2 Build Code."
+            					echo "##############################"; echo
+            					exit 1
+          				else
+            					echo "##############################"; echo
+          				fi
+          				echo "$ccv2_database_update_mode"
+          				if [ "$ccv2_database_update_mode" == "Yes" ]; then
+            					ccv2_database_update_mode="UPDATE"
+          				fi
+          				if [ "$ccv2_database_update_mode" == "yes" ]; then
+            					ccv2_database_update_mode="UPDATE"
+          				fi
+          				if [ "$ccv2_database_update_mode" != "UPDATE" ]; then
+            					ccv2_database_update_mode="NONE"
+          				fi
+          				echo; echo
+          				echo "########################################"
+          				echo "########################################"
+          				echo "########################################"
+          				echo "Started on: `date`"
+          				echo "Build Code: ${ccv2_build_code}"
+          				echo "Database Update Mode: ${ccv2_database_update_mode}"
+          				echo "Environment Code: ${ccv2_env_code}"
+          				echo "########################################"
+          				echo "########################################"
+          				echo "########################################"
+          				./sapccm deployment create --build-code=${ccv2_build_code} --database-update-mode=${ccv2_database_update_mode} --environment-code=${ccv2_env_code}  --strategy=${ccv2_database_strategy} --subscription-code=${ccv2_sub} --no-wait
+          				retVal=$?
+          				if [ $retVal -ne 0 ]; then
+            					echo "CCv2 Deployment Error...`date`"
+            					exit $retVal
+          				fi
+          				sleep 40
+          				ccv2_deployment_code=""
+          				ccv2_deployment_code=`./sapccm deployment list  --subscription-code=${ccv2_sub} |grep " ${ccv2_env_code} " |sort -r | head -1|cut -d' ' -f1`
+          				if [ "$ccv2_deployment_code" == "" ]; then
+            					echo; echo "Deployment code not found for instance: ${ccv2_env_code} and build code: ${ccv2_build_code}..."; echo
+            					exit 1
+          				else
+            					echo "#################################################"
+            					echo "Deployment Code: ${ccv2_deployment_code}"
+            					echo "#################################################"
+            					echo
+          				fi
+          				END_SIGN="No"
+          				END=135
+          				for i in $(seq 1 $END)
+          				do 
+            				echo $i
+            				./sapccm deployment list  --subscription-code=${ccv2_sub} |grep "${ccv2_deployment_code} " > $WORKSPACE/status.txt
+            				DEPLOY_SUCCESS=0
+            				DEPLOY_SUCCESS=`cat $WORKSPACE/status.txt|grep -v "UNDEPLOYED" |grep "DEPLOYED" |wc -l`
+            				cat $WORKSPACE/status.txt
+            				if [[ ${DEPLOY_SUCCESS} > 0 ]]; then
+              					date ; echo 
+              					echo "CCv2 Deployment completed successfully..."; echo
+              					END_SIGN="No"
+              					break
+            				fi
+            				DEPLOY_FAIL=0
+            				DEPLOY_FAIL=`cat $WORKSPACE/status.txt |grep " FAIL " |wc -l`
+            				if [[ ${DEPLOY_FAIL} > 0 ]]; then
+              					echo "CCv2 deployment failed..."; echo
+              					exit 1
+            				fi
+            				DEPLOY_FAIL=0
+            				DEPLOY_FAIL=`cat $WORKSPACE/status.txt |grep "UNDEPLOYED" |wc -l`
+            				if [[ ${DEPLOY_FAIL} > 0 ]]; then
+              					echo "CCv2 deployment status UNDEPLOYED..."; echo
+              					exit 1
+            				fi
+            				date
+            				sleep 40
+            				echo
+          				done
+          				echo "#################################################"
+          				echo "Deployment Code: ${ccv2_deployment_code}"
+          				echo "Deployment Complete: `date`"
+          				echo "#################################################"
+          				echo
+          				sleep 40
+          				./sapccm deployment show --deployment-code=${ccv2_deployment_code}  --subscription-code=${ccv2_sub}
+          				retVal=$?
+          				if [ $retVal -ne 0 ]; then
+            					echo "CCv2 Deployment Error...`date`"
+            					exit $retVal
+          				fi
+          				sleep 40
+          				echo; echo "=====================================================CCv2 Build List======================================================================"
+          				./sapccm build list --subscription-code=${ccv2_sub}
+          				echo "=========================================================================================================================================="; echo
+  
+          				echo "##########################"
+          				for i in {1..8}
+          				do
+            				echo "Build Code: ${ccv2_build_code}"
+          				done
+          				echo "##########################"
+          				echo
+				'''
+					
+					
 					
 				}
             		}
