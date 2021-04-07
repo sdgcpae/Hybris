@@ -36,7 +36,7 @@ spec:
 			
 				container('hybris') {
 					script{
-						propfile = readProperties(file: './devops.properties')
+						propfile = readProperties(file: './project.properties')
 					}
 			
                     			sh '''
