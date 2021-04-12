@@ -58,13 +58,15 @@ spec:
                         			cp -R /$WORKSPACE/bin/custom/ /hybris-commerce-suite/hybris/bin/custom/
 						cd /hybris-commerce-suite/hybris/bin/custom/
 						ls
+						echo "Remove packaged jacoco data file"
+  						rm -f /hybris-commerce-suite/hybris/log/junit/jacoco.exec
                         			cd /hybris-commerce-suite/hybris/bin/platform 
                         			. ./setantenv.sh
 						java -version
 						ant addonuninstall -Daddonnames=assistedservicestorefront,smarteditaddon,captchaaddon,profiletagaddon -DaddonStorefront.yacceleratorstorefront=signetstorefront
 						ant addoninstall -Daddonnames=assistedservicestorefront,smarteditaddon,captchaaddon,profiletagaddon -DaddonStorefront.yacceleratorstorefront=signetstorefront
                         			ant customize clean build -Dinput.template=develop
-						ant production -Dproduction.legacy.mode=true -Dproduction.include.tomcat=true
+						#ant production -Dproduction.legacy.mode=true -Dproduction.include.tomcat=true
             		
 		                    	'''
 		    			echo "Performing npm build..."
