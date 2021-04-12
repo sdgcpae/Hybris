@@ -81,12 +81,6 @@ spec:
 						pwd
 						npm install
 						grunt 
-                   				//npm install -g grunt-cli
-						//npm install grunt --save-dev
-						//npm install grunt-contrib-less --save-dev
-						//npm install grunt-contrib-watch --save-dev
-						//npm install grunt-sync --save-dev
-						//grunt
 		    		
 		    			'''	   
                  		} 
@@ -96,16 +90,7 @@ spec:
 		stage('Unit Test') {
             		steps {
 				container('hybris') {
-
-                    			sh '''
-		    	
-						
-			
-                        			cd /hybris-commerce-suite/hybris/bin/platform 
-                        			. ./setantenv.sh
-                        			ant unittests
-			
-					'''
+				
 					sh '''
 					
 						echo "Running JUnit..."
