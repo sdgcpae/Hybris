@@ -60,25 +60,33 @@ spec:
 						ls
 						echo "Remove packaged jacoco data file"
   						rm -f /hybris-commerce-suite/hybris/log/junit/jacoco.exec
+						
+						echo "Replace ojdbc jar here"
+						// cp -v $HYBRIS_PACKAGES/ojdbc7.jar $HYBRIS_HOME/hybris/bin/platform/lib/dbdriver/ojdbc7.jar; 
+						
+						echo " Create symlinks to environment sprcific property files here" 
+						
                         			cd /hybris-commerce-suite/hybris/bin/platform 
                         			. ./setantenv.sh
 						java -version
 						ant addonuninstall -Daddonnames=assistedservicestorefront,smarteditaddon,captchaaddon,profiletagaddon -DaddonStorefront.yacceleratorstorefront=signetstorefront
 						ant addoninstall -Daddonnames=assistedservicestorefront,smarteditaddon,captchaaddon,profiletagaddon -DaddonStorefront.yacceleratorstorefront=signetstorefront
                         			ant customize clean build -Dinput.template=develop
-						#ant production -Dproduction.legacy.mode=true -Dproduction.include.tomcat=true
+						// ant production -Dproduction.legacy.mode=true -Dproduction.include.tomcat=true
             		
 		                    	'''
 		    			echo "Performing npm build..."
 		    			sh '''
 						cd /$WORKSPACE/bin/custom/signet/signetstorefront/
 						pwd
-                   				npm install -g grunt-cli
-						npm install grunt --save-dev
-						npm install grunt-contrib-less --save-dev
-						npm install grunt-contrib-watch --save-dev
-						npm install grunt-sync --save-dev
-						grunt
+						npm install
+						grunt 
+                   				//npm install -g grunt-cli
+						//npm install grunt --save-dev
+						//npm install grunt-contrib-less --save-dev
+						//npm install grunt-contrib-watch --save-dev
+						//npm install grunt-sync --save-dev
+						//grunt
 		    		
 		    			'''	   
                  		} 
