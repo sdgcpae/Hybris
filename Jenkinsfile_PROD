@@ -99,20 +99,68 @@ spec:
 
                     			sh '''
 		    	
-						export JAVA_HOME=/app/sapjvm8/sapjvm_8/
+						
 			
                         			cd /hybris-commerce-suite/hybris/bin/platform 
                         			. ./setantenv.sh
                         			ant unittests
 			
 					'''
+					sh '''
+					
+						echo "Running JUnit..."
+						//HYBRIS_HOME="${bamboo.build.working.directory}/hybris/ecomm"
+						
+						cd /hybris-commerce-suite/hybris/config
+
+						//dc_cmd="/app/atlassian/buildtools/dc/bin/dependency-check.sh"
+						//dc_report="hybris/ecomm/hybris/log/dc.html"
+						//dc_code_base="hybris/ecomm/hybris/bin/custom"
+
+						export JAVA_HOME=/app/sapjvm8/sapjvm_8/
+						//export PATH=$JAVA_HOME/jre/bin:$JAVA_HOME/bin:$PATH
+						//${dc_cmd} -s ${dc_code_base} -f HTML -o ${dc_report}
+
+
+						if [[ -f /$WORKSPACE/hybris/config/local.properties.junit ]]; then
+						  echo "Preparing junit tests"
+						  cd /hybris-commerce-suite/hybris/config
+						  ln -sf local.properties.junit local.properties
+						  ls -la local.properties
+						  echo; sleep 3
+						  cd /hybris-commerce-suite/hybris/bin/platform 
+
+						  source ./setantenv.sh; check
+
+						  # Install temporary license
+						  echo "Creating temporary license"
+						  # Correct jar file names in license.sh
+						  sed -i 's/log4j-1.2.17.jar/log4j-1.2.17-sap-1.jar/g' license.sh
+						  sed -i 's/guava-21.0.jar/guava-23.0.jar/g' license.sh
+						  sed -i 's/spring-core-4.3.11.RELEASE.jar/spring-core-4.3.21.RELEASE.jar/g' license.sh
+						  sed -i 's/spring-beans-4.3.11.RELEASE.jar/spring-beans-4.3.21.RELEASE.jar/g' license.sh
+						  sed -i 's/spring-context-4.3.11.RELEASE.jar/spring-context-4.3.21.RELEASE.jar/g' license.sh
+						  sed -i 's/commons-io-2.4.jar/commons-io-2.6.jar/g' license.sh
+						  ./license.sh -temp CPS_SQL; check
+
+						  ant jacocoalltests \
+						  -Dtestclasses.extensions=signetcore,signetinitialdata,signetfacades,signetstorefront,signetordermanagement,signetordermanagementbackoffice,zalesstore,zalesoutletstore,peoplesstore,gordonsstore,pagodastore,kayoutletstore,kaystore,jaredstore,signetcommercewebservices,signetuniversalconfigurator,signetstaticmedia,signetbackoffice,signetruleengineservices,groupbysearchbackoffice,signetorderreconciliation,signetsmarteditmodule \
+						   -Dsonar.excludedExtensions=admincockpit,acceleratorcms,acceleratorfacades,acceleratorservices,acceleratorstorefrontcommons,addonsupport,captchaaddon,commercefacades,platformservices,core,testweb,scripting,paymentstandard,mediaweb,maintenanceweb,deliveryzone,commons,processing,impex,validation,catalog,europe1,workflow,hac,comments,advancedsavedquery,springintegrationlibs,ldap,voucher,solrfacetsearch,platformhmc,promotions,basecommerce,ticketsystem,payment,customerreview,wishlist,solrfacetsearchhmc,cms2,btg,cms2lib,commerceservices,commercewebservicescommons,b2bcommerce,b2bapprovalprocess,b2bacceleratorservices,,b2bacceleratorfacades,cisclient,npmancillary,npmtestancillary,cmssmartedit,adaptivesearch,adaptivesearchbackoffice,adaptivesearchsolr,apiregistrybackoffice,apiregistryservices,assistedservicefacades,assistedserviceservices,assistedservicestorefront,auditreportservices,backofficebackofficesolrsearch,basecommercebackoffice,cmsbackoffice,cmsfacades,cmssmarteditwebservices,cmswebservices,cockpit,commerceservicesbackoffice,consignmenttrackingservices,couponbackoffice,couponfacades,couponservices,customersupportbackoffice,droolsruleengineservices,embeddedserver,groovynature,mcc,oauth2,ordercalculation,ordermanagementaddon,ordermanagementfacades,ordermanagementwebservices,pcmbackoffice,permissionsfacades,permissionswebservices,personalizationcms,personalizationservices,platformbackoffice,previewpersonalizationweb,previewwebservices,profileservices,profiletagaddon,promotionenginebackoffice,promotionengineservices,promotionsbackoffice,rulebuilderbackoffice,ruledefinitions,ruleengine,ruleenginebackoffice,ruleengineservices,smarteditaddon,smarteditwebservices,solrfacetsearchbackoffice,ticketsystembackoffice,tomcatembeddedserver,voucherbackoffice,warehousing,warehousingbackoffice,warehousingfacades,warehousingwebservices,webservicescommons \
+						   -Dsonar.inclusions=**/*.java \
+						   -Dsonar.exclusions=file:**/gensrc/**,**/*BeforeViewHandler*.java,**/*Constants.java,**/jalo/**,**/email/context/**,**/*Form*.java,web/src/**,**/platform/**,src/com/hybris/yprofile/**,resources/apache-nutch-1.16-custom-code/apache-nutch-1.16/** \
+						   -Dsonar.java.coveragePlugin=jacoco \
+						   -Dtestclasses.suppress.junit.tenant=false \
+						   -Dtestclasses.annotations=unittests \
+						   -Dtestclasses.web=false  \
+						   -Dmaven.update.dbdrivers=false
+						else
+						  echo "Skipping junit tests, missing properties file: local.properties.junit"
+						  exit 1
+						fi
+
+						'''
 			
-					jacoco( 
-			      			execPattern: '**/*.exec',
-			      			classPattern: '**/*.class',
-			      			sourcePattern: '**/*.java',
-			      			exclusionPattern: '**/test*'
-					)
+					
 			
                  		} 
             		}   
