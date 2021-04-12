@@ -119,6 +119,7 @@ spec:
         	}
 		
 		stage('Code Quality') {
+			when { expression {propfile['code_quality'] == "true" }}
             		environment {
                 		scannerHome = tool 'Sonarqube'
             		}
@@ -158,7 +159,7 @@ spec:
 		}
 	    
 		stage('Deploy') {
-			when { expression { BRANCH_NAME == 'dev' || BRANCH_NAME == 'release' || propfile['feature_deploy'] == "true" } }
+			when { expression {env.GIT_BRANCH == 'dev' || propfile['ondemand_deploy'] == "true" }}
             		steps {
 				container('hybris') {
 					
@@ -348,7 +349,7 @@ spec:
         	}
 
 		stage('Post Deploy Tests') {
-			when { expression { BRANCH_NAME == 'dev' || BRANCH_NAME == 'release' || propfile['feature_deploy'] == "true"} }
+			when { expression {env.GIT_BRANCH == 'dev' || propfile['ondemand_deploy'] == "true" }}
 			parallel {
 				stage('Smoke Test') {
 					steps {
@@ -397,8 +398,15 @@ spec:
 				}
 				}
 				stage('Security Test') {
+					when {expression {env.GIT_BRANCH == 'dev' || propfile['ondemand_securitytest'] == "true" }}
 					steps {
 						echo 'I am running Security Test here'
+					}
+				}
+				stage('Performance Test') {
+					when {expression {env.GIT_BRANCH == 'dev' || propfile['ondemand_perfomancetest'] == "true" }}
+					steps {
+						echo 'I am running Performance Test here'
 					}
 				}
 			}
@@ -415,19 +423,20 @@ spec:
 	  	}
 	  
         	failure {
-            	/*mail bcc: '', 
-	            	 body: "<b>Example</b><br>\n<br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL de build: ${env.BUILD_URL}", 
-	            	 cc: '', 
-        	    	 charset: 'UTF-8', 
-            		 from: '', 
-            	 	mimeType: 'text/html', 
-            	 	replyTo: '', 
-            	 	subject: "ERROR CI: Project name -> ${env.JOB_NAME}", 
-            	 	to: "foo@foomail.com";*/
-			echo 'I am sending a notification with failure'
-        	}
+			script {
+				mail to: propfile['mail_to'],
+				cc: propfile['cc_to'],
+				subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
+				body: "Something is wrong with the ${projectName}-${env.GIT_BRANCH}-Branch-Build-${env.BUILD_NUMBER} Pipeline in the ${FAILED_STAGE} stage.\nBuild URL: ${env.BUILD_URL}"
+			}
+		}
 		success {
-			echo 'I am sending a notification with success'
+			script {
+				mail to: propfile['mail_to'],
+				cc: propfile['cc_to'],
+				subject: "Successful Pipeline: ${currentBuild.fullDisplayName}",
+				body: "${projectName}-${env.GIT_BRANCH}-Branch-Build-${env.BUILD_NUMBER} Pipeline has been completed successfuly.\nBuild URL: ${env.BUILD_URL}"
+			}
 		}
    	}
 }
