@@ -62,7 +62,7 @@ spec:
   						rm -f /hybris-commerce-suite/hybris/log/junit/jacoco.exec
 						
 						echo "Replace ojdbc jar here"
-						// cp -v $HYBRIS_PACKAGES/ojdbc7.jar $HYBRIS_HOME/hybris/bin/platform/lib/dbdriver/ojdbc7.jar; 
+						# cp -v $HYBRIS_PACKAGES/ojdbc7.jar $HYBRIS_HOME/hybris/bin/platform/lib/dbdriver/ojdbc7.jar; 
 						
 						echo " Create symlinks to environment sprcific property files here" 
 						
@@ -71,8 +71,8 @@ spec:
 						java -version
 						ant addonuninstall -Daddonnames=assistedservicestorefront,smarteditaddon,captchaaddon,profiletagaddon -DaddonStorefront.yacceleratorstorefront=signetstorefront
 						ant addoninstall -Daddonnames=assistedservicestorefront,smarteditaddon,captchaaddon,profiletagaddon -DaddonStorefront.yacceleratorstorefront=signetstorefront
-                        			ant customize clean build -Dinput.template=develop
-						// ant production -Dproduction.legacy.mode=true -Dproduction.include.tomcat=true
+                        			ant customize clean build 
+						# ant production -Dproduction.legacy.mode=true -Dproduction.include.tomcat=true
             		
 		                    	'''
 		    			echo "Performing npm build..."
@@ -94,17 +94,17 @@ spec:
 					sh '''
 					
 						echo "Running JUnit..."
-						//HYBRIS_HOME="${bamboo.build.working.directory}/hybris/ecomm"
+						#HYBRIS_HOME="${bamboo.build.working.directory}/hybris/ecomm"
 						
 						cd /hybris-commerce-suite/hybris/config
 
-						//dc_cmd="/app/atlassian/buildtools/dc/bin/dependency-check.sh"
-						//dc_report="hybris/ecomm/hybris/log/dc.html"
-						//dc_code_base="hybris/ecomm/hybris/bin/custom"
+						#dc_cmd="/app/dc/bin/dependency-check.sh"
+						#dc_report="hybris/ecomm/hybris/log/dc.html"
+						#dc_code_base="hybris/ecomm/hybris/bin/custom"
 
 						export JAVA_HOME=/app/sapjvm8/sapjvm_8/
-						//export PATH=$JAVA_HOME/jre/bin:$JAVA_HOME/bin:$PATH
-						//${dc_cmd} -s ${dc_code_base} -f HTML -o ${dc_report}
+						#export PATH=$JAVA_HOME/jre/bin:$JAVA_HOME/bin:$PATH
+						#${dc_cmd} -s ${dc_code_base} -f HTML -o ${dc_report}
 
 
 						if [[ -f /$WORKSPACE/hybris/config/local.properties.junit ]]; then
