@@ -2,22 +2,17 @@
 javadoc=false
 jacoco=false
 code_quality=true
-
-//deployment environment specific variables
-////feature branch and release specific branch deployment
-ondemand_deploy=false
+build_code=false
 
 //Unique Configurations
-
 ccv2_sub=5821ef7ca7274a52bc94b7d9922977fb
 
-//deployment specific variables
-
+//deployment environment specific variables
+////dev environment deployement 
 ccv2_build_code=
 ccv2_database_strategy="RECREATE"
 ccv2_database_update_mode="Yes"
 ccv2_env_code="d1"
-
 
 //post deployment testing specific variables
 ondemand_functionaltest=false
