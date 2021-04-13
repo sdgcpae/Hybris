@@ -9,7 +9,6 @@ ccv2_sub=5821ef7ca7274a52bc94b7d9922977fb
 
 //deployment environment specific variables
 ////dev environment deployement 
-ccv2_build_code=
 ccv2_database_strategy="RECREATE"
 ccv2_database_update_mode="Yes"
 ccv2_env_code="d1"
