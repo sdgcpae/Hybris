@@ -172,7 +172,7 @@ spec:
 	
 		stage('Create Temp Branch') {
 	
-			when { expression { BRANCH_NAME == 'dev' || BRANCH_NAME == 'release' || propfile['feature_deploy'] == "true" } }
+			when { expression { BRANCH_NAME == 'dev' || propfile['feature_deploy'] == "true" } }
 			steps {
 				echo BRANCH_NAME 
 				
