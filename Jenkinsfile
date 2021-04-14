@@ -158,7 +158,7 @@ spec:
 		stage('Post Deploy Tests') {
 			when { expression {env.GIT_BRANCH == 'dev' || env.GIT_BRANCH == 'release'|| propfile['feature_deploy'] == "true" }}
 			parallel {
-				stage('Smoke Test') {
+				stage('Functional Test') {
 					steps {
 					
 						script {
@@ -207,6 +207,12 @@ spec:
 				stage('Security Test') {
 					steps {
 						echo 'I am running Security Test here'
+					}
+				}
+				stage('Performance Test') {
+					when {expression {propfile['ondemand_perfomancetest'] == "true" }}
+					steps {
+						echo 'I am running Performance Test here'
 					}
 				}
 			}
