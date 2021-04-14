@@ -210,7 +210,7 @@ spec:
 					}
 				}
 				stage('Performance Test') {
-					when {expression {propfile['ondemand_perfomancetest'] == "true" }}
+					
 					steps {
 						echo 'I am running Performance Test here'
 					}
