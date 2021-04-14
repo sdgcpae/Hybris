@@ -152,8 +152,8 @@ spec:
 
 						HYBRIS_HOME="/hybris-commerce-suite"
 						SONAR_HOST_URL="https://sonarqube.sgnt.devops.accentureanalytics.com/"
-						SONAR_LOGIN="${bamboo.sonar.login}"
-						SONAR_KEY="${bamboo.sonar.project.key}"
+						#SONAR_LOGIN="${sonar.login}"
+						#SONAR_KEY="${sonar.project.key}"
 						
 
 						check() {
@@ -181,9 +181,9 @@ spec:
 						  -Dsonar.excludedExtensions=admincockpit,backofficesolrsearch,backoffice,smartedit,acceleratorcms,acceleratorfacades,acceleratorservices,acceleratorstorefrontcommons,addonsupport,captchaaddon,commercefacades,platformservices,core,testweb,scripting,paymentstandard,mediaweb,maintenanceweb,deliveryzone,commons,processing,impex,validation,catalog,europe1,workflow,hac,comments,advancedsavedquery,springintegrationlibs,ldap,voucher,solrfacetsearch,platformhmc,promotions,basecommerce,ticketsystem,payment,customerreview,wishlist,solrfacetsearchhmc,cms2,btg,cms2lib,commerceservices,commercewebservicescommons,b2bcommerce,b2bapprovalprocess,b2bacceleratorservices,,b2bacceleratorfacades,cisclient,npmancillary,npmtestancillary,cmssmartedit,adaptivesearch,adaptivesearchbackoffice,adaptivesearchsolr,apiregistrybackoffice,apiregistryservices,assistedservicefacades,assistedserviceservices,assistedservicestorefront,auditreportservices,backofficebackofficesolrsearch,basecommercebackoffice,cmsbackoffice,cmsfacades,cmssmarteditwebservices,cmswebservices,cockpit,commerceservicesbackoffice,consignmenttrackingservices,couponbackoffice,couponfacades,couponservices,customersupportbackoffice,droolsruleengineservices,embeddedserver,groovynature,mcc,oauth2,ordercalculation,ordermanagementaddon,ordermanagementfacades,ordermanagementwebservices,pcmbackoffice,permissionsfacades,permissionswebservices,personalizationcms,personalizationservices,platformbackoffice,previewpersonalizationweb,previewwebservices,profileservices,profiletagaddon,promotionenginebackoffice,promotionengineservices,promotionsbackoffice,rulebuilderbackoffice,ruledefinitions,ruleengine,ruleenginebackoffice,ruleengineservices,smarteditaddon,smarteditwebservices,solrfacetsearchbackoffice,ticketsystembackoffice,tomcatembeddedserver,voucherbackoffice,warehousing,warehousingbackoffice,warehousingfacades,warehousingwebservices,webservicescommons \
 						  -Dsonar.inclusions=**/*.java,web/webroot/**/*.js,web/webroot/**.jsp,web/webroot/**.html,web/webroot/**.ts,web/webroot/**.less,web/webroot/**.xml \
 						  -Dsonar.exclusions=file:**/gensrc/**,**/*demo.html,web/webroot/**/web.xml,web/webroot/WEB-INF/config/**/*,web/webroot/WEB-INF/lib/**/*,web/webroot/WEB-INF/views/welcome.jsp,web/webroot/index.jsp,**/*BeforeViewHandler*.java,web/webroot/static/bootstrap/js/*.js,web/webroot/static/theme/js/*.js,web/webroot/signetsmarteditmodule/js/*.js,**/*Constants.java,**/jalo/**,**/email/context/**,**/*Form*.java,web/src/**,**/platform/**,src/com/hybris/yprofile/**,resources/apache-nutch-1.16-custom-code/apache-nutch-1.16/** \
-						  -Dsonar.projectName=$SONAR_KEY \
+						  -Dsonar.projectName=hybris_${BRANCH_NAME} \
 						  -Dsonar.projectKey=$SONAR_KEY \
-						  -Dsonar.projectVersion=${bamboo.planKey}-BLD${bamboo.buildNumber} \
+						  -Dsonar.projectVersion=${JOB_NAME}-BLD${BUILD_NUMBER} \
 						  -Dtestclasses.suppress.junit.tenant=true \
 						  -Dtestclasses.web=false \
 						  -Dsonar.surefire.reportsPath=$HYBRIS_HOME/hybris/log/junit \
