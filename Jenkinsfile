@@ -113,7 +113,8 @@ spec:
         	}
 	
 		stage('Create Temp Branch') {
-		
+			
+			when { expression {env.GIT_BRANCH == 'dev' || env.GIT_BRANCH == 'release'|| propfile['feature_deploy'] == "true" }}
 			steps {
 				echo "Create temp branch for cloud"
 			}
@@ -121,6 +122,7 @@ spec:
 		}
 		
 		stage('CCV2_Build') {
+			when { expression {env.GIT_BRANCH == 'dev' || env.GIT_BRANCH == 'release'|| propfile['feature_deploy'] == "true" }}
 			steps {
 				echo "CCV2_Build"
 			}
