@@ -81,20 +81,18 @@ spec:
 					sh '''
 					
 						echo "Running JUnit..."
-						#HYBRIS_HOME="${bamboo.build.working.directory}/hybris/ecomm"
-						
-						cd /hybris-commerce-suite/hybris/config
+						#HYBRIS_HOME=/hybris-commerce-suite"
 
-						#dc_cmd="/app/dc/bin/dependency-check.sh"
-						#dc_report="hybris/ecomm/hybris/log/dc.html"
-						#dc_code_base="hybris/ecomm/hybris/bin/custom"
+						dc_cmd="/app/dc/bin/dependency-check.sh"
+						dc_report="/hybris-commerce-suite/hybris/log/dc.html"
+						dc_code_base="/hybris-commerce-suite/hybris/bin/custom"
 
 						export JAVA_HOME=/app/sapjvm8/sapjvm_8/
-						#export PATH=$JAVA_HOME/jre/bin:$JAVA_HOME/bin:$PATH
-						#${dc_cmd} -s ${dc_code_base} -f HTML -o ${dc_report}
+						export PATH=$JAVA_HOME/jre/bin:$JAVA_HOME/bin:$PATH
+						${dc_cmd} -s ${dc_code_base} -f HTML -o ${dc_report}
 
 
-						if [[ -f /$WORKSPACE/hybris/config/local.properties.junit ]]; then
+						if [[ -f /hybris-commerce-suite/hybris/config/local.properties.junit ]]; then
 						  echo "Preparing junit tests"
 						  cd /hybris-commerce-suite/hybris/config
 						  ln -sf local.properties.junit local.properties
