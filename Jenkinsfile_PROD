@@ -22,6 +22,10 @@ spec:
             defaultContainer 'jnlp'
         }
     }  
+    
+    environment {
+   	sap_token = credentials('sap_token')
+	}
 
 		
     	stages {
@@ -241,7 +245,7 @@ spec:
 					./sapccm --help
 					
             				echo "Authenticating"
-            				./sapccm config set auth-credentials 621ae91d71a817f858ad378177a333e
+            				./sapccm config set auth-credentials $sap_token
 					
             				echo "Creating Build"
             				./sapccm build create  --application-code="commerce-cloud" --branch=$ccv2_branch --name="JENKINS_$JOB_NAME-BLD_$BUILD_NUMBER"  --no-wait  --subscription-code=${ccv2_sub}
