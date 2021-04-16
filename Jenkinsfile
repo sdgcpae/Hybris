@@ -156,7 +156,7 @@ spec:
         	}
 
 		stage('Post Deploy Tests') {
-			when { expression {env.GIT_BRANCH == 'dev' || env.GIT_BRANCH == 'release'|| propfile['feature_deploy'] == "true" }}
+			
 			parallel {
 				stage('Functional Test') {
 					steps {
@@ -205,12 +205,13 @@ spec:
 				}
 				}
 				stage('Security Test') {
+					when { expression {env.GIT_BRANCH == 'dev' || env.GIT_BRANCH == 'release'|| propfile['feature_deploy'] == "true" }}
 					steps {
 						echo 'I am running Security Test here'
 					}
 				}
 				stage('Performance Test') {
-					
+					when { expression {env.GIT_BRANCH == 'dev' || env.GIT_BRANCH == 'release'|| propfile['feature_deploy'] == "true" }}
 					steps {
 						echo 'I am running Performance Test here'
 					}
