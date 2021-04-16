@@ -127,7 +127,7 @@ spec:
 		}
 	    
 		stage('CCV2_Deploy') {
-			when { expression {env.GIT_BRANCH == 'dev' || env.GIT_BRANCH == 'release'|| propfile['feature_deploy'] == "true" }}
+			
             		steps {
 				container('hybris') {
 					
