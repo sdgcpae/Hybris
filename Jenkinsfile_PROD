@@ -24,7 +24,46 @@ spec:
     }  
     
     environment {
-   	sap_token = credentials('sap_token')
+   	
+	//ci specific variables
+	javadoc=false
+	jacoco=false
+	code_quality=true
+	
+
+	//Unique Configurations
+	ccv2_sub=5821ef7ca7274a52bc94b7d9922977fb
+
+	//deployment environment specific variables
+	////dev environment deployement 
+	ccv2_database_strategy="RECREATE"
+	ccv2_database_update_mode="Yes"
+	ccv2_env_code="d1"
+
+	//post deployment testing specific variables
+	ondemand_functionaltest=false
+	ondemand_securitytest=false
+	ondemand_performancetest=false
+
+	////functionaltest (worksoft) specific variables
+	uri=http://pwwsftapp01.irving.zalecorp.com/executionmanager/api
+	DEV_host1=10.6.71.16
+	uname=devopsengineering@signetjewelers.com
+	RequestID=
+	deployment_user=
+	stage_name=
+
+	////security test specific variables
+	////performance test specific variables
+
+	//email notification specific variables
+	////seperate emails with a coma (,) e.g. test@gmail.com,test2@gmail.com
+	mail_to=''
+	cc_to=''
+	
+	//Tokens
+	sap_token = credentials('sap_token')
+
 	}
 
 		
@@ -37,10 +76,7 @@ spec:
 					
 					script{
 						propfile = readProperties(file: './project.properties_PROD')
-						ccv2_sub=propfile['ccv2_sub'] 
-    						ccv2_database_strategy=propfile['ccv2_database_strategy'] 
-    						ccv2_database_update_mode=propfile['ccv2_database_update_mode']
-    						ccv2_env_code=propfile['ccv2_env_code']
+						
     						ccv2_branch=propfile['ccv2_branch']
 					}
 			
@@ -141,7 +177,7 @@ spec:
         	}
 		
 		stage('Code Quality') {
-			when { expression {propfile['code_quality'] == "true" }}
+			when { expression {code_quality == "true" }}
             		environment {
                 		scannerHome = tool 'Sonarqube'
             		}
@@ -436,7 +472,7 @@ spec:
 			when { expression {env.GIT_BRANCH == 'dev' }}
 			parallel {
 				stage('Functional Test') {
-				when {expression {propfile['ondemand_functionaltest'] == "true" }}
+				when {expression {ondemand_functionaltest == "true" }}
 					steps {
 						script {
 							echo "I am executing Smoke Test on target dev environment post deployment"
@@ -480,13 +516,13 @@ spec:
 				}
 				}
 				stage('Security Test') {
-					when {expression {propfile['ondemand_securitytest'] == "true" }}
+					when {expression {ondemand_securitytest == "true" }}
 					steps {
 						echo 'I am running Security Test here'
 					}
 				}
 				stage('Performance Test') {
-					when {expression {propfile['ondemand_perfomancetest'] == "true" }}
+					when {expression {ondemand_perfomancetest == "true" }}
 					steps {
 						echo 'I am running Performance Test here'
 					}
