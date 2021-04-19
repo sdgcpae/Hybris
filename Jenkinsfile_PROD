@@ -75,9 +75,7 @@ spec:
 				container('hybris') {
 					
 					script{
-						propfile = readProperties(file: './project.properties_PROD')
-						
-    						ccv2_branch=propfile['ccv2_branch']
+						propfile = readProperties(file: './project.properties_PROD')	
 					}
 			
                     			sh '''
@@ -251,6 +249,7 @@ spec:
 				echo BRANCH_NAME 
 				CPLD_STOREFRONT=/hybris-commerce-suite/hybris/bin/custom/signet/signetstorefront
 				NON_CPLD_STOREFRONT=$WORKSPACE/ecomm/hybris/bin/custom/signet/signetstorefront
+				//ccv2_branch=""
 				
 				sh ' git remote -v'
 				
@@ -265,6 +264,8 @@ spec:
 				//sh ' git config remote.origin.url 'https://"sdgcpsb":"sureshnaga@123"@github.com/sdgcpsb/Hybris.git''
 				//sh 'git push origin "temp_$BRANCH_NAME_$BUILD_NUMBER"'
 				//sh ' git push origin "temp_$BRANCH_NAME_$BUILD_NUMBER" , credentialsId: 'git_creds' '
+				
+				echo "Temp branch is $ccv2_branch"
 				
 			}
 		}
