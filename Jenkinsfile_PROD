@@ -29,10 +29,6 @@ spec:
 	javadoc=false
 	jacoco=false
 	code_quality=true
-	
-
-	//Unique Configurations
-	ccv2_sub=5821ef7ca7274a52bc94b7d9922977fb
 
 	//deployment environment specific variables
 	////dev environment deployement 
@@ -63,6 +59,7 @@ spec:
 	
 	//Tokens
 	sap_token = credentials('sap_token')
+	ccv2_sub = credentials('ccv2_sub')
 
 	}
 
