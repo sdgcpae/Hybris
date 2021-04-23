@@ -129,7 +129,9 @@ spec:
 						}
 						
 					
-						sh" echo ${ccv2_database_strategy}"
+						sh''' 
+						echo ${ccv2_database_strategy}
+						'''
 						
 	
       
