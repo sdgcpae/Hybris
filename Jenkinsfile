@@ -109,7 +109,12 @@ spec:
 		stage('CCV2_Deploy') {
 			when { expression {GIT_BRANCH == 'dev' ||  (propfile['auto_deploy'] == "true" && ((GIT_BRANCH).startsWith('project') )) ||  (propfile['auto_deploy'] == "true" && ((GIT_BRANCH).startsWith('release') )) }}
             		steps {
-				script{
+				
+				container('hybris') {
+					
+					script{
+						
+						propfile = readProperties(file: './project.properties_PROD')
 						if (GIT_BRANCH == 'dev') {
 							ccv2_database_strategy=propfile['ccv2_database_strategy']
 							ccv2_database_update_mode=propfile['ccv2_database_update_mode']
@@ -121,8 +126,8 @@ spec:
 							ccv2_env_code=propfile['ccv2_auto_env_code']
 							
 						}
-				}
-				container('hybris') {
+						echo "$ccv2_database_update_mode"
+					}
 				 
 					sh'''
 				
