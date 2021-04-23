@@ -116,7 +116,7 @@ spec:
 			when { expression {GIT_BRANCH == 'dev' ||  (propfile['auto_deploy'] == "true" && GIT_BRANCH ==~ /release\//) ||  (propfile['auto_deploy'] == "true" && GIT_BRANCH ==~ /project\//) }}
             		steps {
 				container('hybris') {
-				
+				sh '''
 				if (GIT_BRANCH == 'dev') {
 				
 					ccv2_database_strategy=propfile['ccv2_database_strategy']
@@ -132,6 +132,7 @@ spec:
 				
 				}
 			
+				'''
 				
 				sh'''
 				
