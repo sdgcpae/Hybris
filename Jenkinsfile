@@ -71,21 +71,15 @@ spec:
         	}
 		
 		stage('Code Quality') {
-			when { expression {code_quality == "true" }}
-            		environment {
-                		scannerHome = tool 'Sonarqube'
-            		}
+			when { expression {propfile['code_quality'] == "true" }}
             		steps {
-				container('maven') {
-                			withSonarQubeEnv(installationName:'Sonarqube') {
+				
                     				sh ''' 
 						
 						echo "SOnar"
 						
 						'''
-					}
-                			
-				}
+				
             		}
         	}
 	
