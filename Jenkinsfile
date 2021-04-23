@@ -131,7 +131,7 @@ spec:
 					
 				 		sh'''
 						
-						
+						propfile = readProperties(file: './project.properties_PROD')
 				
 						echo ${ccv2_auto_database_strategy}
 						'''
