@@ -107,7 +107,7 @@ spec:
 				}
 
 		stage('CCV2_Deploy') {
-			when { expression {GIT_BRANCH == 'dev' ||  (propfile['auto_deploy'] == "true" && GIT_BRANCH ==~ /release\//) ||  (propfile['auto_deploy'] == "true" && GIT_BRANCH ==~ /project\//) }}
+			when { expression {GIT_BRANCH == 'dev' ||  (propfile['auto_deploy'] == "true" && ((GIT_BRANCH).startsWith('project') )) ||  (propfile['auto_deploy'] == "true" && ((GIT_BRANCH).startsWith('release') )) }}
             		steps {
 				container('hybris') {
 				sh '''
@@ -145,7 +145,7 @@ spec:
         	}
 
 		stage('Post Deploy Tests') {
-			when { expression {env.GIT_BRANCH == 'dev' ||  (propfile['auto_post_deploy_tests'] == "true" && env.GIT_BRANCH ==~ /release\//) ||  (propfile['auto_post_deploy_tests'] == "true" && env.GIT_BRANCH ==~ /project\//) }}
+			when { expression {env.GIT_BRANCH == 'dev' ||  (propfile['auto_post_deploy_tests'] == "true" && ((GIT_BRANCH).startsWith('project') )/) ||  (propfile['auto_post_deploy_tests'] == "true" && ((GIT_BRANCH).startsWith('release') )) }}
 			parallel {
 				stage('Functional Test') {
 				when {expression {ondemand_functionaltest == "true" }}
