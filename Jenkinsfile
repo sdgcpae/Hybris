@@ -91,7 +91,7 @@ spec:
 	
 		stage('Create Temp Branch') {
 	
-			when { expression { env.GIT_BRANCH == 'dev' || propfile['build_code'] == "true" } }
+			when { expression { GIT_BRANCH == 'dev' || propfile['build_code'] == "true" } }
 			steps {
 			
 				
@@ -101,7 +101,7 @@ spec:
 		}
 	    
 		stage('CCV2_Build') {
-			when { expression {env.GIT_BRANCH == 'dev' || propfile['build_code'] == "true" }}
+			when { expression {GIT_BRANCH == 'dev' || propfile['build_code'] == "true" }}
             		steps {
 				container('hybris') {
 					
@@ -113,11 +113,11 @@ spec:
 				}
 
 		stage('CCV2_Deploy') {
-			when { expression {env.GIT_BRANCH == 'dev' ||  (propfile['auto_deploy'] == "true" && env.GIT_BRANCH ==~ /release\//) ||  (propfile['auto_deploy'] == "true" && env.GIT_BRANCH ==~ /project\//) }}
+			when { expression {GIT_BRANCH == 'dev' ||  (propfile['auto_deploy'] == "true" && GIT_BRANCH ==~ /release\//) ||  (propfile['auto_deploy'] == "true" && GIT_BRANCH ==~ /project\//) }}
             		steps {
 				container('hybris') {
 				
-				if (env.GIT_BRANCH == 'dev') {
+				if (GIT_BRANCH == 'dev') {
 				
 					ccv2_database_strategy=propfile['ccv2_database_strategy']
 					ccv2_database_update_mode=propfile['ccv2_database_update_mode']
