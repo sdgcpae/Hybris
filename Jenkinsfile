@@ -111,20 +111,26 @@ spec:
             		steps {
 				container('hybris') {
 				sh '''
-				if(GIT_BRANCH == 'dev'){
+				if[GIT_BRANCH == 'dev']{
 				
 					ccv2_database_strategy=propfile['ccv2_database_strategy']
 					ccv2_database_update_mode=propfile['ccv2_database_update_mode']
 					ccv2_env_code=propfile['ccv2_env_code']
 				
 				}
-				else if(propfile['auto_deploy'] == "true") {
+				elif[propfile['auto_deploy'] == "true"]{
 				
 					ccv2_database_strategy=propfile['ccv2_auto_database_strategy']
 					ccv2_database_update_mode=propfile['ccv2_auto_database_update_mode']
 					ccv2_env_code=propfile['ccv2_auto_env_code']
 				
 				}
+				else{
+				 	echo "No Deploy"
+				 
+				}
+				fi
+				 
 			
 				'''
 				
