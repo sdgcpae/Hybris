@@ -129,7 +129,7 @@ spec:
 				 
 					sh'''
 				
-						echo "$ccv2_database_strategy"
+						echo $ccv2_database_strategy
 						echo "$ccv2_database_update_mode"
 						echo "$ccv2_env_code"
       
