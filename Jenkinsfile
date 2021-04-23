@@ -145,7 +145,7 @@ spec:
         	}
 
 		stage('Post Deploy Tests') {
-			when { expression {env.GIT_BRANCH == 'dev' ||  (propfile['auto_post_deploy_tests'] == "true" && ((GIT_BRANCH).startsWith('project') )/) ||  (propfile['auto_post_deploy_tests'] == "true" && ((GIT_BRANCH).startsWith('release') )) }}
+			when { expression {env.GIT_BRANCH == 'dev' ||  (propfile['auto_post_deploy_tests'] == "true" && ((GIT_BRANCH).startsWith('project') )) ||  (propfile['auto_post_deploy_tests'] == "true" && ((GIT_BRANCH).startsWith('release') )) }}
 			parallel {
 				stage('Functional Test') {
 				when {expression {ondemand_functionaltest == "true" }}
