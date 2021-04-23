@@ -1,1 +1,47 @@
-build_code=false
+build_code=true
+auto_deploy=true
+auto_post_deploy_tests=false
+
+
+//ci specific variables
+javadoc=false
+jacoco=false
+code_quality=true
+
+
+//Unique Configurations
+ccv2_sub=5821ef7ca7274a52bc94b7d9922977fb
+
+//deployment environment specific variables
+////auto deploy environment details 
+ccv2_auto_database_strategy="RECREATE"
+ccv2_auto_database_update_mode="Yes"
+ccv2_auto_env_code=
+
+
+//deployment environment specific variables
+////dev environment deployement 
+ccv2_database_strategy="RECREATE"
+ccv2_database_update_mode="Yes"
+ccv2_env_code="d1"
+
+//post deployment testing specific variables
+ondemand_functionaltest=false
+ondemand_securitytest=false
+ondemand_performancetest=false
+
+////functionaltest (worksoft) specific variables
+uri=http://pwwsftapp01.irving.zalecorp.com/executionmanager/api
+DEV_host1=10.6.71.16
+uname=devopsengineering@signetjewelers.com
+RequestID=
+deployment_user=
+stage_name=
+
+////security test specific variables
+////performance test specific variables
+
+//email notification specific variables
+////seperate emails with a coma (,) e.g. test@gmail.com,test2@gmail.com
+mail_to=''
+cc_to=''
