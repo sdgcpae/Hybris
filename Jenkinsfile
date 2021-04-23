@@ -115,6 +115,7 @@ spec:
 					script{
 						
 						propfile = readProperties(file: './project.properties_PROD')
+						
 						if (GIT_BRANCH == 'dev') {
 							ccv2_database_strategy=propfile['ccv2_database_strategy']
 							ccv2_database_update_mode=propfile['ccv2_database_update_mode']
@@ -128,7 +129,7 @@ spec:
 						}
 						
 					
-				 
+				 		sh'''
 					
 				
 						echo "$ccv2_auto_database_strategy"
@@ -136,7 +137,7 @@ spec:
 						echo "$ccv2_env_code"
       
           					echo " Deploying now"
-          				
+          					'''
 					
 					
 					}
