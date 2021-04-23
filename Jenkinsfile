@@ -129,7 +129,7 @@ spec:
 						
 					
 				 
-					sh'''
+					
 				
 						echo "$ccv2_auto_database_strategy"
 						echo "$ccv2_database_update_mode"
@@ -137,7 +137,7 @@ spec:
       
           					echo " Deploying now"
           				
-					'''
+					
 					
 					}
 					
