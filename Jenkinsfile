@@ -110,30 +110,28 @@ spec:
 			when { expression {GIT_BRANCH == 'dev' ||  (propfile['auto_deploy'] == "true" && ((GIT_BRANCH).startsWith('project') )) ||  (propfile['auto_deploy'] == "true" && ((GIT_BRANCH).startsWith('release') )) }}
             		steps {
 				container('hybris') {
-				sh '''
-				if [$GIT_BRANCH == 'dev'];then
-					ccv2_database_strategy=propfile['ccv2_database_strategy']
-					ccv2_database_update_mode=propfile['ccv2_database_update_mode']
-					ccv2_env_code=propfile['ccv2_env_code']
-				else
-					ccv2_database_strategy=propfile['ccv2_auto_database_strategy']
-					ccv2_database_update_mode=propfile['ccv2_auto_database_update_mode']
-					ccv2_env_code=propfile['ccv2_auto_env_code']
+					script{
+						if [$GIT_BRANCH == 'dev'];then
+							ccv2_database_strategy=propfile['ccv2_database_strategy']
+							ccv2_database_update_mode=propfile['ccv2_database_update_mode']
+							ccv2_env_code=propfile['ccv2_env_code']
+						else
+							ccv2_database_strategy=propfile['ccv2_auto_database_strategy']
+							ccv2_database_update_mode=propfile['ccv2_auto_database_update_mode']
+							ccv2_env_code=propfile['ccv2_auto_env_code']
  
-				fi
+						fi
+					}
 				 
-			
-				'''
+					sh'''
 				
-				sh'''
-				
-				echo "$ccv2_database_strategy"
-				echo "$ccv2_database_update_mode"
-				echo "$ccv2_env_code"
+						echo "$ccv2_database_strategy"
+						echo "$ccv2_database_update_mode"
+						echo "$ccv2_env_code"
       
-          			echo " Deploying now"
+          					echo " Deploying now"
           				
-				'''
+					'''
 					
 					
 					
