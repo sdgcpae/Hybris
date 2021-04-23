@@ -111,6 +111,7 @@ spec:
             		steps {
 				container('hybris') {
 					script{
+						propfile = readProperties(file: './project.properties_PROD')
 						if (GIT_BRANCH == 'dev') {
 							ccv2_database_strategy=propfile['ccv2_database_strategy']
 							ccv2_database_update_mode=propfile['ccv2_database_update_mode']
