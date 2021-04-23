@@ -24,38 +24,6 @@ spec:
     }  
     
     environment {
-   	
-	//ci specific variables
-	javadoc=false
-	jacoco=false
-	code_quality=true
-
-	//deployment environment specific variables
-	////dev environment deployement 
-	ccv2_database_strategy="RECREATE"
-	ccv2_database_update_mode="Yes"
-	ccv2_env_code="d1"
-
-	//post deployment testing specific variables
-	ondemand_functionaltest=false
-	ondemand_securitytest=false
-	ondemand_performancetest=false
-
-	////functionaltest (worksoft) specific variables
-	uri=http://pwwsftapp01.irving.zalecorp.com/executionmanager/api
-	DEV_host1=10.6.71.16
-	uname=devopsengineering@signetjewelers.com
-	RequestID=
-	deployment_user=
-	stage_name=
-
-	////security test specific variables
-	////performance test specific variables
-
-	//email notification specific variables
-	////seperate emails with a coma (,) e.g. test@gmail.com,test2@gmail.com
-	mail_to=''
-	cc_to=''
 	
 	//Tokens
 	sap_token = credentials('sap_token')
@@ -349,9 +317,25 @@ spec:
 				}
 
 		stage('CCV2_Deploy') {
-			when { expression {env.GIT_BRANCH == 'dev' }}
+			when { expression {env.GIT_BRANCH == 'dev' ||  (propfile['auto_deploy'] == "true" && env.GIT_BRANCH ==~ /release\//) ||  (propfile['auto_deploy'] == "true" && env.GIT_BRANCH ==~ /project\//) }}
             		steps {
 				container('hybris') {
+				
+				if (env.GIT_BRANCH == 'dev') {
+				
+					ccv2_database_strategy=propfile['ccv2_database_strategy']
+					ccv2_database_update_mode=propfile['ccv2_database_update_mode']
+					ccv2_env_code=propfile['ccv2_env_code']
+				
+				}
+				else if(propfile['auto_deploy'] == "true") {
+				
+					ccv2_database_strategy=propfile['ccv2_auto_database_strategy']
+					ccv2_database_update_mode=propfile['ccv2_auto_database_update_mode']
+					ccv2_env_code=propfile['ccv2_auto_env_code']
+				
+				}
+			
 				
 				sh'''
       
@@ -467,7 +451,7 @@ spec:
         	}
 
 		stage('Post Deploy Tests') {
-			when { expression {env.GIT_BRANCH == 'dev' }}
+			when { expression {env.GIT_BRANCH == 'dev' ||  (propfile['auto_post_deploy_tests'] == "true" && env.GIT_BRANCH ==~ /release\//) ||  (propfile['auto_post_deploy_tests'] == "true" && env.GIT_BRANCH ==~ /project\//) }}
 			parallel {
 				stage('Functional Test') {
 				when {expression {ondemand_functionaltest == "true" }}
