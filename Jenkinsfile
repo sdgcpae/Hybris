@@ -68,7 +68,7 @@ spec:
 			
                  		} 
 				
-			steps {
+			script {
 					
 					echo "Steps"
 					
