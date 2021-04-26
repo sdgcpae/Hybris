@@ -69,8 +69,12 @@ spec:
                  		} 
 				
 			script {
-					
+				
+				sh '''
 					echo "Steps"
+					
+					
+				'''
 					
 			}
             		}   
