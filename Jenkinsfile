@@ -67,6 +67,12 @@ spec:
 					
 			
                  		} 
+				
+			steps {
+					
+					echo "Steps"
+					
+			}
             		}   
         	}
 		
