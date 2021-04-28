@@ -139,9 +139,9 @@ spec:
 				
 				script{
 					def branch=(GIT_BRANCH).replaceAll('/','-')
-					print $branch
+					print(branch)
 					def name=ccv2_jenkins_deploy_${branch}_${BUILD_NUMBER}
-					print $name
+					print(name)
 					
 				}
 				
