@@ -131,11 +131,18 @@ spec:
 				container('hybris') {
 				echo "CCV2_Build"
 				
-				sh'env.ccv2_test="abc"'
+				sh'''
+				
+				withEnv(["env.ccv2_test=""]) { 
+				env.ccv2_test="abc"
+				}
+				
+				'''
 					
 				}
 				
 			}
+			
 			
 			
 		}
@@ -150,7 +157,7 @@ spec:
 					echo "I am executing Deploy to target environment."
 					sh '''	
 					cd $CCV2CMD
-					echo ${ccv2_test}
+					echo ${env.ccv2_test}
 					export JAVA_HOME=/app/sapmachine-jdk-11.0.10/
 					./sapccm --help
 					'''
