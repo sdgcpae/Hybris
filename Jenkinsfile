@@ -133,16 +133,18 @@ spec:
 				sh'ccv2_test="abc"'
 					
 				}
+				
+				echo ${ccv2_test}
 			}
 			
-			echo ${ccv2_test}
+			
 		}
 	    
 		stage('CCV2_Deploy') {
 			
             		steps {
 				
-				echo ${ccv2_test}
+				
 				container('hybris') {
 					
 					echo "I am executing Deploy to target environment."
