@@ -131,18 +131,23 @@ spec:
 		stage('CCV2_Build') {
 			steps {
 				
-				container('hybris') {
+				//container('hybris') {
+				
 				echo "CCV2_Build"
 					
 				echo "I am executing Deploy to target environment."
-				def branch=(GIT_BRANCH).replaceAll('/','-')
-				echo $branch
-				def name=ccv2_jenkins_deploy_${branch}_${BUILD_NUMBER}
-				echo $name
+				
+				script{
+					def branch=(GIT_BRANCH).replaceAll('/','-')
+					print $branch
+					def name=ccv2_jenkins_deploy_${branch}_${BUILD_NUMBER}
+					print $name
+					
+				}
 				
 				
 					
-				}
+				//}
 				
 			}
 			
