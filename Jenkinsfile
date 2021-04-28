@@ -128,7 +128,7 @@ spec:
 			steps {
 				echo "CCV2_Build"
 				
-				ccv2_test="abc"
+				sh'ccv2_test="abc"'
 			}
 		}
 	    
