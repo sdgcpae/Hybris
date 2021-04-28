@@ -127,7 +127,7 @@ spec:
 				echo "CCV2_Build"
 					
 				echo "I am executing Deploy to target environment."
-				sh ' env.ccv2_test=abcd'
+				sh ' $env.ccv2_test=abcd'
 				
 				
 				
