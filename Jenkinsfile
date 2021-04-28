@@ -28,6 +28,7 @@ spec:
 		CCV2CMD="/app/sap_cli/bin"
 		ccv2_env="d1"
 		ccv2_temp_branch="ccv2_deploy_${ccv2_env}"
+		ccv2_test=""
 	}
     	stages {
         
@@ -130,7 +131,7 @@ spec:
 				container('hybris') {
 				echo "CCV2_Build"
 				
-				sh'ccv2_test="abc"'
+				sh'env.ccv2_test="abc"'
 					
 				}
 				
