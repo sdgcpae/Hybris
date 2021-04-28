@@ -127,14 +127,9 @@ spec:
 				echo "CCV2_Build"
 					
 				echo "I am executing Deploy to target environment."
+				sh ' ccv2_test=abcd'
 				
-				script{
-					def branch=(GIT_BRANCH).replaceAll('/','-')
-					print(branch)
-					def name=ccv2_jenkins_deploy_${branch}_${BUILD_NUMBER}
-					print(name)
-					
-				}
+				
 				
 				
 					
@@ -156,7 +151,7 @@ spec:
 					echo "I am executing Deploy to target environment."
 					sh '''	
 					cd $CCV2CMD
-					echo ${env.ccv2_test}
+					echo ${ccv2_test}
 					export JAVA_HOME=/app/sapmachine-jdk-11.0.10/
 					./sapccm --help
 					'''
