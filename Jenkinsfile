@@ -120,7 +120,8 @@ spec:
 		stage('Create Temp Branch') {
 		
 			steps {
-				echo "Create temp branch for cloud"
+				name=ccv2_jenkins_deploy_${(GIT_BRANCH).replaceAll("/","-")}_${BUILD_NUMBER}
+				echo $name
 			}
 		
 		}
