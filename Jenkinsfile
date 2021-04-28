@@ -133,7 +133,7 @@ spec:
 				
 				sh'''
 				
-				withEnv(["env.ccv2_test=""]) { 
+				withEnv([env.ccv2_test=""]) { 
 				env.ccv2_test="abc"
 				}
 				
