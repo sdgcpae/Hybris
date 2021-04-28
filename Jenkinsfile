@@ -134,7 +134,6 @@ spec:
 					
 				}
 				
-				echo "${ccv2_test}"
 			}
 			
 			
