@@ -117,16 +117,7 @@ spec:
             		}
         	}
 	
-		stage('Create Temp Branch') {
 		
-			steps {
-				script{
-					name=ccv2_jenkins_deploy_${(GIT_BRANCH).replaceAll("/","-")}_${BUILD_NUMBER}
-					echo $name
-				}
-			}
-		
-		}
 		
 		stage('CCV2_Build') {
 			steps {
