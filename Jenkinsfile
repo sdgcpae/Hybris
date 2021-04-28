@@ -28,7 +28,7 @@ spec:
 		CCV2CMD="/app/sap_cli/bin"
 		ccv2_env="d1"
 		ccv2_temp_branch="ccv2_deploy_${ccv2_env}"
-		ccv2_test=""
+		ccv2_test="a"
 	}
     	stages {
         
@@ -133,7 +133,7 @@ spec:
 				
 				sh'''
 				
-				withEnv([env.ccv2_test=""]) { 
+				withEnv(["env.ccv2_test=a"]) { 
 				env.ccv2_test="abc"
 				}
 				
