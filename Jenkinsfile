@@ -32,6 +32,7 @@ spec:
     	stages {
         
 		stage('Build') {
+			when { expression { false } }
             		steps {
 			
 				container('hybris') {
@@ -73,7 +74,9 @@ spec:
         	}
 		
 		stage('Unit Test') {
+			when { expression { false } }
             		steps {
+				
 				container('hybris') {
 
                     			sh '''
@@ -98,6 +101,7 @@ spec:
         	}
 		
 		stage('Code Quality') {
+			when { expression { false } }
             		steps {
 				container('maven') {
                 			withSonarQubeEnv(installationName:'Sonarqube') {
@@ -124,7 +128,7 @@ spec:
 			steps {
 				echo "CCV2_Build"
 				
-				$ccv2_test="abc"
+				ccv2_test="abc"
 			}
 		}
 	    
