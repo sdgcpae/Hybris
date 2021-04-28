@@ -127,7 +127,7 @@ spec:
 				echo "CCV2_Build"
 					
 				echo "I am executing Deploy to target environment."
-				sh ' ccv2_test=abcd'
+				sh ' env.ccv2_test=abcd'
 				
 				
 				
@@ -151,7 +151,7 @@ spec:
 					echo "I am executing Deploy to target environment."
 					sh '''	
 					cd $CCV2CMD
-					echo ${ccv2_test}
+					echo ${env.ccv2_test}
 					export JAVA_HOME=/app/sapmachine-jdk-11.0.10/
 					./sapccm --help
 					'''
