@@ -137,7 +137,7 @@ spec:
 							ccv2_env_code=propfile['ccv2_auto_env_code']
 							
 						}
-						
+					}
 					
 						sh''' 
 						echo ${ccv2_database_strategy}
@@ -151,7 +151,7 @@ spec:
 					
 					}
 					
-				}
+				
             		}
         	}
 
