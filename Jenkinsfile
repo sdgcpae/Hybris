@@ -136,6 +136,8 @@ spec:
 							ccv2_database_update_mode=propfile['ccv2_auto_database_update_mode']
 							ccv2_env_code=propfile['ccv2_auto_env_code']
 							
+							print(ccv2_database_strategy)
+							
 						}
 					
 					
