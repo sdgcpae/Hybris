@@ -141,14 +141,14 @@ spec:
 					
 						sh "echo ${ccv2_database_strategy}"
 						sh "echo "ccv2 build code is ${ccv2_database_strategy}""
-						sh "echo "ccv2 build code is $ccv2_database_strategy""
-						sh '''
+						
+						sh """
 						echo $ccv2_database_strategy
 						echo ccv2_database_strategy
 						echo "${ccv2_database_strategy}"
 						echo '${ccv2_database_strategy}'
 						echo "$ccv2_database_strategy"
-						'''
+						"""
 						
 	
       
