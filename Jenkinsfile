@@ -141,6 +141,11 @@ spec:
 					
 						sh''' 
 						echo ${ccv2_database_strategy}
+						echo $ccv2_database_strategy
+						echo ccv2_database_strategy
+						echo "${ccv2_database_strategy}"
+						echo '${ccv2_database_strategy}"
+						echo "$ccv2_database_strategy"
 						'''
 						
 	
