@@ -33,7 +33,7 @@ spec:
     	stages {
         
 		stage('Build') {
-			when { expression { false } }
+			
             		steps {
 			
 				container('hybris') {
@@ -102,17 +102,43 @@ spec:
         	}
 		
 		stage('Code Quality') {
-			when { expression { false } }
+			
             		steps {
-				container('maven') {
+				container('hybris') {
                 			withSonarQubeEnv(installationName:'Sonarqube') {
-                    				sh ''' $scannerHome/bin/sonar-scanner -X -Dsonar.projectName="hybris-sample" -Dsonar.projectKey="hybris-sample" -Dsonar.projectVersion=1.0  -Dsonar.extensions=trainingstorefront-Dsonar.host.url='https://sonarqube.sgnt.devops.accentureanalytics.com/' -Dsonar.exclusions=file:**/gensrc/**,**/*demo.html,web/webroot/**/web.xml,web/webroot/WEB-INF/config/**/*,web/webroot/WEB-INF/lib/**/*,web/webroot/WEB-INF/views/welcome.jsp,web/webroot/index.jsp,**/*BeforeViewHandler*.java,web/webroot/static/bootstrap/js/*.js,web/webroot/static/theme/js/*.js,web/webroot/signetsmarteditmodule/js/*.js,**/*Constants.java,**/jalo/**,**/email/context/**,**/*Form*.java,web/src/**,**/platform/**,src/com/hybris/yprofile/**,resources/apache-nutch-1.16-custom-code/apache-nutch-1.16/**,**/*.java
+						
+                    				sh '''
+						
+						export JAVA_HOME=/app/sapjvm8/sapjvm_8/
+						export PATH=$JAVA_HOME/jre/bin:$JAVA_HOME/bin:$PATH
+						
+						
+						cd /hybris-commerce-suite/hybris/bin/platform
+						. ./setantenv.sh
+						ant sonarcheck \
+						-Dsonar.host.url=https://sonarqube.sgnt.devops.accentureanalytics.com \
+						-Dsonar.login=d6fb6ab3725866ef82c6548048987360badeabb5 \
+						-Dsonar.sourceEncoding=UTF-8 \
+  						-Dtestclasses.extensions=signetcore,signetinitialdata,signetfacades,signetstorefront,signetordermanagement,signetordermanagementbackoffice,zalesstore,zalesoutletstore,peoplesstore,gordonsstore,pagodastore,kayoutletstore,kaystore,jaredstore,signetcommercewebservices,signetuniversalconfigurator,signetstaticmedia,signetruleengineservices,groupbysearchbackoffice,signetorderreconciliation,signetsmarteditmodule \
+  						-Dmaven.update.dbdrivers=false \
+  						-Dsonar.excludedExtensions=admincockpit,backofficesolrsearch,backoffice,smartedit,acceleratorcms,acceleratorfacades,acceleratorservices,acceleratorstorefrontcommons,addonsupport,captchaaddon,commercefacades,platformservices,core,testweb,scripting,paymentstandard,mediaweb,maintenanceweb,deliveryzone,commons,processing,impex,validation,catalog,europe1,workflow,hac,comments,advancedsavedquery,springintegrationlibs,ldap,voucher,solrfacetsearch,platformhmc,promotions,basecommerce,ticketsystem,payment,customerreview,wishlist,solrfacetsearchhmc,cms2,btg,cms2lib,commerceservices,commercewebservicescommons,b2bcommerce,b2bapprovalprocess,b2bacceleratorservices,,b2bacceleratorfacades,cisclient,npmancillary,npmtestancillary,cmssmartedit,adaptivesearch,adaptivesearchbackoffice,adaptivesearchsolr,apiregistrybackoffice,apiregistryservices,assistedservicefacades,assistedserviceservices,assistedservicestorefront,auditreportservices,backofficebackofficesolrsearch,basecommercebackoffice,cmsbackoffice,cmsfacades,cmssmarteditwebservices,cmswebservices,cockpit,commerceservicesbackoffice,consignmenttrackingservices,couponbackoffice,couponfacades,couponservices,customersupportbackoffice,droolsruleengineservices,embeddedserver,groovynature,mcc,oauth2,ordercalculation,ordermanagementaddon,ordermanagementfacades,ordermanagementwebservices,pcmbackoffice,permissionsfacades,permissionswebservices,personalizationcms,personalizationservices,platformbackoffice,previewpersonalizationweb,previewwebservices,profileservices,profiletagaddon,promotionenginebackoffice,promotionengineservices,promotionsbackoffice,rulebuilderbackoffice,ruledefinitions,ruleengine,ruleenginebackoffice,ruleengineservices,smarteditaddon,smarteditwebservices,solrfacetsearchbackoffice,ticketsystembackoffice,tomcatembeddedserver,voucherbackoffice,warehousing,warehousingbackoffice,warehousingfacades,warehousingwebservices,webservicescommons \
+  						-Dsonar.inclusions=**/*.java,web/webroot/**/*.js,web/webroot/**.jsp,web/webroot/**.html,web/webroot/**.ts,web/webroot/**.less,web/webroot/**.xml \
+  						-Dsonar.exclusions=file:**/gensrc/**,**/*demo.html,web/webroot/**/web.xml,web/webroot/WEB-INF/config/**/*,web/webroot/WEB-INF/lib/**/*,web/webroot/WEB-INF/views/welcome.jsp,web/webroot/index.jsp,**/*BeforeViewHandler*.java,web/webroot/static/bootstrap/js/*.js,web/webroot/static/theme/js/*.js,web/webroot/signetsmarteditmodule/js/*.js,**/*Constants.java,**/jalo/**,**/email/context/**,**/*Form*.java,web/src/**,**/platform/**,src/com/hybris/yprofile/**,resources/apache-nutch-1.16-custom-code/apache-nutch-1.16/** \
+  						-Dsonar.projectName=hybris_${BRANCH_NAME} \
+  						-Dsonar.projectKey=cloud-migration-develop \
+       						-Dsonar.projectVersion=Hybris-BLD${BUILD_NUMBER} \
+						-Dsonar.sources=/hybris-commerce-suite \
+						-DprojectBaseDir=/hybris-commerce-suite \
+  						-Dtestclasses.suppress.junit.tenant=true \
+  						-Dtestclasses.web=false \
+  						-Dsonar.surefire.reportsPath=$HYBRIS_HOME/hybris/log/junit \
+  						-Dsonar.dynamicAnalysis=reuseReports \
+     						-Dsonar.junit.reportsPath=$HYBRIS_HOME/hybris/log/junit \
+  						-Dsonar.jacoco.reportPaths=$HYBRIS_HOME/hybris/log/junit/jacoco.exec 
+						
                     				'''
                 			}
-                			timeout(time: 10, unit: 'MINUTES') {
-						//sleep(60)
-                				waitForQualityGate abortPipeline: true
-                			}
+                			
 				}
             		}
         	}
@@ -120,6 +146,7 @@ spec:
 		
 		
 		stage('CCV2_Build') {
+			when { expression { false } }
 			steps {
 				
 				//container('hybris') {
@@ -142,6 +169,7 @@ spec:
 		}
 	    
 		stage('CCV2_Deploy') {
+			when { expression { false } }
 			
             		steps {
 				
@@ -174,6 +202,7 @@ spec:
         	}
 
 		stage('Post Deploy Tests') {
+			when { expression { false } }
 			
 			parallel {
 				stage('Functional Test') {
