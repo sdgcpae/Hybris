@@ -49,6 +49,11 @@ spec:
                         			cp -R /$WORKSPACE/bin/custom/training/trainingstorefront/ /hybris-commerce-suite/hybris/bin/custom/training/trainingstorefront/
 						cd /hybris-commerce-suite/hybris/bin/custom/training/trainingstorefront/
 						ls
+						rm -rf /hybris-commerce-suite/hybris/bin/platform/resources/ant/sonar/lib/sonarqube-ant-task-2.5.jar
+						
+						cp /$WORKSPACE/sonarqube-ant-task-2.6.0.1426.jar /hybris-commerce-suite/hybris/bin/platform/resources/ant/sonar/lib/
+						cd /hybris-commerce-suite/hybris/bin/platform/resources/ant/sonar/lib/
+						ls 
                         			cd /hybris-commerce-suite/hybris/bin/platform 
                         			. ./setantenv.sh
 						java -version
