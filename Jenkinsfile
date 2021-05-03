@@ -45,15 +45,10 @@ spec:
                         			#!/bin/bash
 						export JAVA_HOME=/app/sapjvm8/sapjvm_8/
                         			java -version
-						cd /sonar
-						ls
                         			mkdir -p /hybris-commerce-suite/hybris/bin/custom/training/trainingstorefront/
                         			cp -R /$WORKSPACE/bin/custom/training/trainingstorefront/ /hybris-commerce-suite/hybris/bin/custom/training/trainingstorefront/
 						cd /hybris-commerce-suite/hybris/bin/custom/training/trainingstorefront/
 						ls
-						rm -rf /hybris-commerce-suite/hybris/bin/platform/resources/ant/sonar/lib/sonarqube-ant-task-2.5.jar
-						
-						cp /$WORKSPACE/sonarqube-ant-task-2.6.0.1426.jar /hybris-commerce-suite/hybris/bin/platform/resources/ant/sonar/lib/
 						cd /hybris-commerce-suite/hybris/bin/platform/resources/ant/sonar/lib/
 						ls 
                         			cd /hybris-commerce-suite/hybris/bin/platform 
@@ -126,6 +121,7 @@ spec:
 						-Dsonar.host.url=https://sonarqube.sgnt.devops.accentureanalytics.com \
 						-Dsonar.login=d6fb6ab3725866ef82c6548048987360badeabb5 \
 						-Dsonar.sourceEncoding=UTF-8 \
+						-Dsonar.web.context=/batch/index \
   						-Dtestclasses.extensions=signetcore,signetinitialdata,signetfacades,signetstorefront,signetordermanagement,signetordermanagementbackoffice,zalesstore,zalesoutletstore,peoplesstore,gordonsstore,pagodastore,kayoutletstore,kaystore,jaredstore,signetcommercewebservices,signetuniversalconfigurator,signetstaticmedia,signetruleengineservices,groupbysearchbackoffice,signetorderreconciliation,signetsmarteditmodule \
   						-Dmaven.update.dbdrivers=false \
   						-Dsonar.excludedExtensions=admincockpit,backofficesolrsearch,backoffice,smartedit,acceleratorcms,acceleratorfacades,acceleratorservices,acceleratorstorefrontcommons,addonsupport,captchaaddon,commercefacades,platformservices,core,testweb,scripting,paymentstandard,mediaweb,maintenanceweb,deliveryzone,commons,processing,impex,validation,catalog,europe1,workflow,hac,comments,advancedsavedquery,springintegrationlibs,ldap,voucher,solrfacetsearch,platformhmc,promotions,basecommerce,ticketsystem,payment,customerreview,wishlist,solrfacetsearchhmc,cms2,btg,cms2lib,commerceservices,commercewebservicescommons,b2bcommerce,b2bapprovalprocess,b2bacceleratorservices,,b2bacceleratorfacades,cisclient,npmancillary,npmtestancillary,cmssmartedit,adaptivesearch,adaptivesearchbackoffice,adaptivesearchsolr,apiregistrybackoffice,apiregistryservices,assistedservicefacades,assistedserviceservices,assistedservicestorefront,auditreportservices,backofficebackofficesolrsearch,basecommercebackoffice,cmsbackoffice,cmsfacades,cmssmarteditwebservices,cmswebservices,cockpit,commerceservicesbackoffice,consignmenttrackingservices,couponbackoffice,couponfacades,couponservices,customersupportbackoffice,droolsruleengineservices,embeddedserver,groovynature,mcc,oauth2,ordercalculation,ordermanagementaddon,ordermanagementfacades,ordermanagementwebservices,pcmbackoffice,permissionsfacades,permissionswebservices,personalizationcms,personalizationservices,platformbackoffice,previewpersonalizationweb,previewwebservices,profileservices,profiletagaddon,promotionenginebackoffice,promotionengineservices,promotionsbackoffice,rulebuilderbackoffice,ruledefinitions,ruleengine,ruleenginebackoffice,ruleengineservices,smarteditaddon,smarteditwebservices,solrfacetsearchbackoffice,ticketsystembackoffice,tomcatembeddedserver,voucherbackoffice,warehousing,warehousingbackoffice,warehousingfacades,warehousingwebservices,webservicescommons \
