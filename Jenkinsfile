@@ -117,27 +117,139 @@ spec:
 						
 						cd /hybris-commerce-suite/hybris/bin/platform
 						. ./setantenv.sh
-						ant sonarcheck \
-						-Dsonar.host.url=https://sonarqube.sgnt.devops.accentureanalytics.com \
-						-Dsonar.login=d6fb6ab3725866ef82c6548048987360badeabb5 \
-						-Dsonar.sourceEncoding=UTF-8 \
-						-Dsonar.web.context=https://sonarqube.sgnt.devops.accentureanalytics.com/batch/index \
-  						-Dtestclasses.extensions=signetcore,signetinitialdata,signetfacades,signetstorefront,signetordermanagement,signetordermanagementbackoffice,zalesstore,zalesoutletstore,peoplesstore,gordonsstore,pagodastore,kayoutletstore,kaystore,jaredstore,signetcommercewebservices,signetuniversalconfigurator,signetstaticmedia,signetruleengineservices,groupbysearchbackoffice,signetorderreconciliation,signetsmarteditmodule \
-  						-Dmaven.update.dbdrivers=false \
-  						-Dsonar.excludedExtensions=admincockpit,backofficesolrsearch,backoffice,smartedit,acceleratorcms,acceleratorfacades,acceleratorservices,acceleratorstorefrontcommons,addonsupport,captchaaddon,commercefacades,platformservices,core,testweb,scripting,paymentstandard,mediaweb,maintenanceweb,deliveryzone,commons,processing,impex,validation,catalog,europe1,workflow,hac,comments,advancedsavedquery,springintegrationlibs,ldap,voucher,solrfacetsearch,platformhmc,promotions,basecommerce,ticketsystem,payment,customerreview,wishlist,solrfacetsearchhmc,cms2,btg,cms2lib,commerceservices,commercewebservicescommons,b2bcommerce,b2bapprovalprocess,b2bacceleratorservices,,b2bacceleratorfacades,cisclient,npmancillary,npmtestancillary,cmssmartedit,adaptivesearch,adaptivesearchbackoffice,adaptivesearchsolr,apiregistrybackoffice,apiregistryservices,assistedservicefacades,assistedserviceservices,assistedservicestorefront,auditreportservices,backofficebackofficesolrsearch,basecommercebackoffice,cmsbackoffice,cmsfacades,cmssmarteditwebservices,cmswebservices,cockpit,commerceservicesbackoffice,consignmenttrackingservices,couponbackoffice,couponfacades,couponservices,customersupportbackoffice,droolsruleengineservices,embeddedserver,groovynature,mcc,oauth2,ordercalculation,ordermanagementaddon,ordermanagementfacades,ordermanagementwebservices,pcmbackoffice,permissionsfacades,permissionswebservices,personalizationcms,personalizationservices,platformbackoffice,previewpersonalizationweb,previewwebservices,profileservices,profiletagaddon,promotionenginebackoffice,promotionengineservices,promotionsbackoffice,rulebuilderbackoffice,ruledefinitions,ruleengine,ruleenginebackoffice,ruleengineservices,smarteditaddon,smarteditwebservices,solrfacetsearchbackoffice,ticketsystembackoffice,tomcatembeddedserver,voucherbackoffice,warehousing,warehousingbackoffice,warehousingfacades,warehousingwebservices,webservicescommons \
-  						-Dsonar.inclusions=**/*.java,web/webroot/**/*.js,web/webroot/**.jsp,web/webroot/**.html,web/webroot/**.ts,web/webroot/**.less,web/webroot/**.xml \
-  						-Dsonar.exclusions=file:**/gensrc/**,**/*demo.html,web/webroot/**/web.xml,web/webroot/WEB-INF/config/**/*,web/webroot/WEB-INF/lib/**/*,web/webroot/WEB-INF/views/welcome.jsp,web/webroot/index.jsp,**/*BeforeViewHandler*.java,web/webroot/static/bootstrap/js/*.js,web/webroot/static/theme/js/*.js,web/webroot/signetsmarteditmodule/js/*.js,**/*Constants.java,**/jalo/**,**/email/context/**,**/*Form*.java,web/src/**,**/platform/**,src/com/hybris/yprofile/**,resources/apache-nutch-1.16-custom-code/apache-nutch-1.16/** \
-  						-Dsonar.projectName=hybris_${BRANCH_NAME} \
-  						-Dsonar.projectKey=cloud-migration-develop \
-       						-Dsonar.projectVersion=Hybris-BLD${BUILD_NUMBER} \
-						-Dsonar.sources=/hybris-commerce-suite \
-						-DprojectBaseDir=/hybris-commerce-suite \
-  						-Dtestclasses.suppress.junit.tenant=true \
-  						-Dtestclasses.web=false \
-  						-Dsonar.surefire.reportsPath=$HYBRIS_HOME/hybris/log/junit \
-  						-Dsonar.dynamicAnalysis=reuseReports \
-     						-Dsonar.junit.reportsPath=$HYBRIS_HOME/hybris/log/junit \
-  						-Dsonar.jacoco.reportPaths=$HYBRIS_HOME/hybris/log/junit/jacoco.exec 
+						ant sonarcheck -Dsonar.projectName=hybris_${BRANCH_NAME} -Dsonar.projectKey=hybris_sample -Dsonar.projectVersion=1.0 -Dsonar.qualityGate=Hybris_Sonar -Dsonar.sources=/hybris-commerce-suite/hybris/bin/custom/ -Dsonar.extensions=trainingstorefront-Dsonar.host.url='https://sonarqube.sgnt.devops.accentureanalytics.com/' -Dsonar.exclusions=file:**/gensrc/**,**/*demo.html,web/webroot/**/web.xml,web/webroot/WEB-INF/config/**/*,web/webroot/WEB-INF/lib/**/*,web/webroot/WEB-INF/views/welcome.jsp,web/webroot/index.jsp,**/*BeforeViewHandler*.java,web/webroot/static/bootstrap/js/*.js,web/webroot/static/theme/js/*.js,web/webroot/signetsmarteditmodule/js/*.js,**/*Constants.java,**/jalo/**,**/email/context/**,**/*Form*.java,web/src/**,**/platform/**,src/com/hybris/yprofile/**,resources/apache-nutch-1.16-custom-code/apache-nutch-1.16/**,**/*.java
+                    				'''
+                			}
+                			timeout(time: 10, unit: 'MINUTES') {
+						//sleep(60)
+                				waitForQualityGate abortPipeline: true
+                			}
+				}
+            		}
+        	}
+	
+		stage('Create Temp Branch') {
+		
+			steps {
+				echo "Create temp branch for cloud"
+			}
+		
+		}
+	    
+		stage('Deploy') {
+			when { expression {env.GIT_BRANCH == 'dev' || env.GIT_BRANCH == 'release'|| propfile['feature_deploy'] == "true" }}
+            		steps {
+				container('hybris') {
+					
+					echo "I am executing Deploy to target environment."
+					sh '''	
+					cd $CCV2CMD
+					export JAVA_HOME=/app/sapmachine-jdk-11.0.10/
+					./sapccm --help
+					'''
+					
+					/*
+					  	sapccm config set auth-credentials {TOKEN_VALUE}
+					  	echo "Create a Build"
+					  	sapccm build create –application-code=commerce-cloud  --branch=BRANCH_NAME –name=BUILD_NAME –no-wait –subscription-code= SUBSCRIPTION_CODE
+					  
+					  	echo "Check a Build"
+					  	sapccm  build show –subscription-code=SUBSCRIPTION_CODE  --build-code=BUILD_CODE
+					  	echo "Create a Deployment"
+					  	sapccm deployment create –build-code=BUILD_CODE  --subscription-code=SUBSCRIPTION_CODE  --database-update-mode=NONE/UPDATE/INITIALIZE  --environment-code=d1/s1/p1  --strategy=CREATE/ROLLING_UPDATE  --subscriptioni-code=SUBSCRIPTION_CODE
+					  	echo "Check Deployment" 
+					  	sapccm deployment list –subscription-code=SUBSCRIPTION_CODE 
+					*/
+					
+				}
+            		}
+        	}
+
+		stage('Post Deploy Tests') {
+			when { expression {env.GIT_BRANCH == 'dev' || env.GIT_BRANCH == 'release'|| propfile['feature_deploy'] == "true" }}
+			parallel {
+				stage('Smoke Test') {
+					steps {
+					
+						script {
+							
+							if (propfile['smoke_test'] == "true") {
+								echo "I am executing Smoke Test on target dev environment post deployment"
+				
+							/*RESP=`curl -X GET "${bamboo.uri}/RequestsRunning" -H "accept: application/xml" -H "authorization: bearer lR0AA2qfq7v9Ry96vDAgqcer1GPVd5yStmv1_aJVFS43rk06EytB7WsS0_owoiXIgpOXmZVEfkY4ST0JwHtRBk7RH0QRaldWtQT8udC0VdimdGx38RddY2sGaeeF0t9Aflr5rh1Jc_EUfkNK8YrKVxQ6kxB05aCe46CD2fkognv7TiJATmht-ycUjEsd_oy8jH5EK9fmn9eL-wXavNTQcEdsUmFm3-2r3IJDzMK7XCa74qu353yOKLvVyZ1yYQBnc1_fY5GS1BDrFLUZprxpAS30lGEu-d_JTTOQ989UJtIEB3cZzDkIQzeqdYBGCsiDdjdHo2DC1FK2kVPyBITTbQ"`
+							echo "The response for current execution status is: $RESP"
+							if [ "$RESP" != "[]" ];
+							then
+							echo "There is a test executing currently in Worksoft. Hence, not proceeding with the execution of Worksoft test cases."
+							exit 1
+							else
+							echo "There are no tests executing right now. Hence, proceeding with Worksoft test execution"
+							fi
+							# To abort the request before attempting to re-run, uncomment and run below line.
+							# abort=$(curl -X PUT -H "Authorization: Bearer $token" -d "" -H "id: ${bamboo.RequestID}" ${bamboo.uri}/Request/${bamboo.RequestID}/abort/)
+							guid=$(curl -X PUT -H "Authorization: Bearer $token" -d "" -H "parameters: {TestEnv}{${bamboo.stage_name}}" -H "id: ${bamboo.RequestID}" ${bamboo.uri}/ExecuteRequest/ | tr -d \")
+							echo "The GUID is: $guid"
+							status=$(curl -X GET -H "Authorization: Bearer $token" -d "" -H "APIRequestID: $guid" ${bamboo.uri}/ExecutionStatus/ | awk -F':' '{print $2}' | tr -d \" | tr -d \})
+							echo "The status is: $status"
+							while [[ $status != *"Completed"* ]]
+							do
+							status=$(curl -X GET -H "Authorization: Bearer $token" -d "" -H "APIRequestID: $guid" ${bamboo.uri}/ExecutionStatus/ | awk -F':' '{print $2}' | tr -d \" | tr -d \})
+							echo "The status is: $status"
+							sleep 15
+							done	
+							status=$(curl -X GET -H "Authorization: Bearer $token" -d "" -H "APIRequestID: $guid" ${bamboo.uri}/ExecutionStatus/)
+							echo "The status is: $status"
+							execstatus=$(curl -X GET -H "Authorization: Bearer $token" -d "" -H "APIRequestID: $guid" ${bamboo.uri}/ExecutionStatus/ | awk -F':' '{print $3}' | tr -d \" | tr -d \})
+							echo "The exec status is: $execstatus"
+							if [[ $execstatus != *Passed* ]];
+							then
+							echo "Failed"
+							exit 1
+							else
+							echo "Passed"
+							exit
+							fi
+							exit */
+						}
+					}
+				}
+				}
+				stage('Security Test') {
+					steps {
+						echo 'I am running Security Test here'
+					}
+				}
+			}
+		}    
+  	}
+  	post {
+	  
+		always {
+			script {
+				if (propfile['javadoc'] == "true") {
+					javadoc(javadocDir: "/$WORKSPACE", keepAll: true)
+        			}
+		  	}
+	  	}
+	  
+        	failure {
+            	/*mail bcc: '', 
+	            	 body: "<b>Example</b><br>\n<br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL de build: ${env.BUILD_URL}", 
+	            	 cc: '', 
+        	    	 charset: 'UTF-8', 
+            		 from: '', 
+            	 	mimeType: 'text/html', 
+            	 	replyTo: '', 
+            	 	subject: "ERROR CI: Project name -> ${env.JOB_NAME}", 
+            	 	to: "foo@foomail.com";*/
+			echo 'I am sending a notification with failure'
+        	}
+		success {
+			echo 'I am sending a notification with success'
+		}
+   	}
+}
+
 						
                     				'''
                 			//}
