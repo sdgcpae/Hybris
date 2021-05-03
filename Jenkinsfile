@@ -107,7 +107,7 @@ spec:
 			
             		steps {
 				container('hybris') {
-                			//withSonarQubeEnv(installationName:'Sonarqube') {
+                			withSonarQubeEnv(installationName:'Sonarqube') {
 						
                     				sh '''
 						
@@ -118,7 +118,8 @@ spec:
 						cd /hybris-commerce-suite/hybris/bin/platform
 						. ./setantenv.sh
 						ant sonarcheck -Dsonar.projectName=hybris_${BRANCH_NAME} -Dsonar.projectKey=hybris_sample -Dsonar.projectVersion=1.0 -Dsonar.qualityGate=Hybris_Sonar -Dsonar.sources=/hybris-commerce-suite/hybris/bin/custom/ -Dsonar.extensions=trainingstorefront-Dsonar.host.url='https://sonarqube.sgnt.devops.accentureanalytics.com/' -Dsonar.exclusions=file:**/gensrc/**,**/*demo.html,web/webroot/**/web.xml,web/webroot/WEB-INF/config/**/*,web/webroot/WEB-INF/lib/**/*,web/webroot/WEB-INF/views/welcome.jsp,web/webroot/index.jsp,**/*BeforeViewHandler*.java,web/webroot/static/bootstrap/js/*.js,web/webroot/static/theme/js/*.js,web/webroot/signetsmarteditmodule/js/*.js,**/*Constants.java,**/jalo/**,**/email/context/**,**/*Form*.java,web/src/**,**/platform/**,src/com/hybris/yprofile/**,resources/apache-nutch-1.16-custom-code/apache-nutch-1.16/**,**/*.java
-                    				'''
+                    				
+						'''
                 			}
                 			timeout(time: 10, unit: 'MINUTES') {
 						//sleep(60)
