@@ -115,7 +115,7 @@ spec:
 						
 						cd /hybris-commerce-suite/hybris/bin/platform
 						. ./setantenv.sh
-						ant sonarcheck \
+						ant sonar \
 						-Dsonar.host.url=https://sonarqube.sgnt.devops.accentureanalytics.com \
 						-Dsonar.login=d6fb6ab3725866ef82c6548048987360badeabb5 \
 						-Dsonar.sourceEncoding=UTF-8 \
